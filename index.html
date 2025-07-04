@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>แสดงตำแหน่งของฉันบนแมพ</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  
+  <style>
+    #map { height: 500px; }
+  </style>
+</head>
+<body>
+
+<h3>ตำแหน่งของฉัน</h3>
+<div id="map"></div>
+
+<script>
+  // สร้าง map
+  var map = L.map('map').setView([13.7563, 100.5018], 13); // กรุงเทพเริ่มต้น
+
+  // ใส่ TileLayer (OpenStreetMap)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+  }).addTo(map);
+
+  // ใช้ Geolocation API
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var lat = position.coords.latitude;
+      var lng = position.coords.longitude;
+
+      // set view ไปที่ตำแหน่งปัจจุบัน
+      map.setView([lat, lng], 16);
+
+      // marker
+      L.marker([lat, lng]).addTo(map)
+        .bindPopup("คุณอยู่ที่นี่")
+        .openPopup();
+    }, function(error) {
+      alert("ไม่สามารถดึงตำแหน่งได้: " + error.message);
+    });
+  } else {
+    alert("เบราว์เซอร์นี้ไม่รองรับ Geolocation API");
+  }
+</script>
+<script src="script.js"></script>
+
+
+</body>
+</html>
